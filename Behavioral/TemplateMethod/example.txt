@@ -1,0 +1,65 @@
+class GameAI is
+    // Template method should be defined in a base class.
+    // Its body is a set of method class in a defined order.
+    // Usually, they are the steps of some algorithm.
+    method turn() is
+        collectResources()
+        buildStructures()
+        buildUnits()
+        attack()
+
+    // Some of these steps may be implemented right in a
+    // base class.
+    method collectResources() is
+        foreach s in this.builtStructures
+            s.collect()
+
+    // And some of them may be defined as abstract.
+    abstract method buildStructures()
+    abstract method buildUnits()
+
+    // By the way, a class could have several
+    // template methods.
+    method attack() is
+        enemy = closestEnemy()
+        if (enemy == null)
+            sendScouts(map.center)
+        else
+            sendWarriors(enemy.position)
+
+    abstract method sendScouts(position)
+    abstract method sendWarriors(position)
+
+// Subclasses can provide their own steps implementation as
+// long as they don't change the template method.
+class OrcsAI extends GameAI is
+    method buildStructures() is
+        If enough resources then
+            Build farms, then barracks, then stronghold.
+
+    method buildUnits() is
+        If enough resources
+            If scouts not exist, build 1 peon.
+            Else build grunt.
+
+    // ...
+
+    method sendScouts(position) is
+        if (have any scouts) then
+            Send scouts to position.
+
+    method sendWarriors(position) is
+        if (num of grunts is more than 5) then
+            Send warriors to position.
+
+// Subclasses may not only implement abstract steps but also
+// override default steps from the base class.
+class MonstersAI extends GameAI is
+    method collectResources() is
+        Do nothing.
+
+    method buildStructures() is
+        Do nothing.
+
+    method buildUnits() is
+        Do nothing.
